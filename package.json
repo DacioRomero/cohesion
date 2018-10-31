@@ -1,0 +1,22 @@
+{
+  "name": "zoo-api",
+  "version": "1.0.0",
+  "description": "Partner project for [@MakeSchool](https://github.com/MakeSchool)'s SPD 1.2 Class",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DacioRomero/Steam-Matcher.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DacioRomero/Steam-Matcher/issues"
+  },
+  "homepage": "https://github.com/DacioRomero/Steam-Matcher#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
