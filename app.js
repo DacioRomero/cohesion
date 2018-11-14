@@ -23,9 +23,7 @@ app.set('view engine', 'hbs');
 app.use(express.static(path.join(__dirname, '/public')));
 
 // ROUTES
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-});
+app.use(require('./controllers/index'));
 
 // LISTENER
 if (require.main === module) {
