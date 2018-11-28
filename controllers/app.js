@@ -29,6 +29,14 @@ router.get('/', (req, res) => {
                     'game_modes-eq': 2
                 }
             }))
+
+            // return igbd.games({
+            //     fields: '*',
+            //     filter: {
+            //         'websites.url-any': sharedGames.map(id => `https://store.steampowered.com/app/${id}`),
+            //         'game_modes-eq': 2
+            //     }
+            // })
         })
         .then(details => {
             res.json(details.map(detail => detail.body[0]).filter(x => x != null));
