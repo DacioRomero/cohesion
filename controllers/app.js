@@ -2,12 +2,12 @@
 const express = require('express');
 const Promise = require('bluebird');
 const intersection = require('array-intersection');
-const IGBDAPI = require('igdb-api-node').default;
+const IGDBAPI = require('igdb-api-node').default;
 const SteamAPI = require('../utils/steamapi');
 
 const router = express.Router();
 const steam = SteamAPI();
-const igbd = IGBDAPI();
+const igbd = IGDBAPI();
 
 router.get('/', (req, res) => {
     if (!req.query.steamids) {
@@ -15,34 +15,25 @@ router.get('/', (req, res) => {
             error: 'You need to provide SteamIDs'
         })
     }
-    
-    const steamids = req.query.steamids.split(',')
-    Promise.map(steamids, id => steam.getOwnedGames(id))
-        .then(gameLists => {
-            const appidLists = gameLists.map(list => list.games.map(game => game.appid))
-            const sharedGames = intersection(...appidLists)
 
-            return Promise.map(sharedGames, id => igbd.games({
+    const steamids = req.query.steamids.split(',')
+    Promise.map(steamids, steamid => steam.getOwnedGames(steamid))
+        .then(playerGames => {
+            const appids = playerGames.map(list => list.games.map(game => game.appid))
+            const sharedGames = intersection(...appids)
+
+            return igbd.games({
                 fields: '*',
                 filters: {
-                    'websites.url-eq': `https://store.steampowered.com/app/${id}`,
-                    'game_modes-eq': 2
+                    'external_games.uid-=': `(${sharedGames.join(',')})`
                 }
-            }))
-
-            // return igbd.games({
-            //     fields: '*',
-            //     filter: {
-            //         'websites.url-any': sharedGames.map(id => `https://store.steampowered.com/app/${id}`),
-            //         'game_modes-eq': 2
-            //     }
-            // })
+            });
         })
         .then(details => {
-            res.json(details.map(detail => detail.body[0]).filter(x => x != null));
+            res.json(details.body);
         })
         .catch(error => {
-            res.status(400).json({error: error.message});
+            res.status(400).json(error);
             console.error(error.message)
         })
 });
