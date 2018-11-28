@@ -23,6 +23,7 @@ app.use(express.static(path.join(__dirname, '/public')));
 
 // ROUTES
 app.use(require('./controllers/index'));
+app.use('/app', require('./controllers/app'));
 
 // LISTENER
 if (require.main === module) {
