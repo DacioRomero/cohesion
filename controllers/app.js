@@ -11,14 +11,17 @@ const igbd = IGBDAPI();
 
 router.get('/', (req, res) => {
     if (!req.query.steamids) {
-        return res.redirect('/');
+        return res.json({
+            error: 'You need to provide SteamIDs'
+        })
     }
+    
     const steamids = req.query.steamids.split(',')
     Promise.map(steamids, id => steam.getOwnedGames(id))
         .then(gameLists => {
             const appidLists = gameLists.map(list => list.games.map(game => game.appid))
             const sharedGames = intersection(...appidLists)
-            
+
             return Promise.map(sharedGames, id => igbd.games({
                 fields: '*',
                 filters: {
@@ -27,26 +30,12 @@ router.get('/', (req, res) => {
                 }
             }))
         })
-        .then(details =>{
+        .then(details => {
             res.json(details.map(detail => detail.body[0]).filter(x => x != null));
         })
         .catch(error => {
+            res.status(400).json({error: error.message});
             console.error(error.message)
-        })
-});
-
-router.get('/test', (req, res) => {
-    const appids = req.query.appids.split(',')
-    const urls = appids.map(id => `https://store.steampowered.com/app/${id}`);
-
-    igbd.games({
-            fields: '*',
-            filters: {
-                'websites.urls-any': urls
-            }
-        })
-        .then(results => {
-            res.status(200).json(results);
         })
 });
 
