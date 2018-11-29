@@ -11,7 +11,7 @@ const igbd = IGDBAPI();
 
 router.get('/', (req, res) => {
     if (!req.query.steamids) {
-        return res.json({
+        return res.status(400).json({
             error: 'You need to provide SteamIDs'
         })
     }
@@ -19,21 +19,28 @@ router.get('/', (req, res) => {
     const steamids = req.query.steamids.split(',')
     Promise.map(steamids, steamid => steam.getOwnedGames(steamid))
         .then(playerGames => {
-            const appids = playerGames.map(list => list.games.map(game => game.appid))
-            const sharedGames = intersection(...appids)
+            const sharedGames = intersection(...playerGames)
 
-            return igbd.games({
-                fields: '*',
-                filters: {
-                    'external_games.uid-=': `(${sharedGames.join(',')})`
-                }
+            let batches = []
+            for (let i = 0; i < sharedGames.length; i += 50) {
+                batches.push(sharedGames.slice(i, i + 50));
+            }
+
+            return Promise.map(batches, batch => {
+                return igbd.games({
+                    fields: '*',
+                    filters: {
+                        'external_games.uid-=': `(${batch.join(',')})`
+                    },
+                    limit: 50
+                })
             });
         })
-        .then(details => {
-            res.json(details.body);
+        .then(detailsBatches => {
+            res.status(200).json(detailsBatches.map(batch => batch.body).flat());
         })
         .catch(error => {
-            res.status(400).json(error);
+            res.status(400).json(error.message);
             console.error(error.message)
         })
 });
