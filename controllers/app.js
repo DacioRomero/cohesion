@@ -2,12 +2,19 @@
 const express = require('express');
 const Promise = require('bluebird');
 const intersection = require('array-intersection');
-const IGDBAPI = require('igdb-api-node').default;
+const apicalypse = require('@igdb/apicalypse').default;
 const SteamAPI = require('../utils/steamapi');
 
 const router = express.Router();
 const steam = SteamAPI();
-const igbd = IGDBAPI();
+const igbd = apicalypse({
+    baseURL: "https://endpoint-alpha.igdb.com",
+    headers: {
+        'Accept': 'application/json',
+        'user-key': process.env.IGDB_API_KEY
+    },
+    responseType: 'json'
+});
 
 router.get('/', (req, res) => {
     if (!req.query.steamids) {
@@ -26,22 +33,29 @@ router.get('/', (req, res) => {
                 batches.push(sharedGames.slice(i, i + 50));
             }
 
-            return Promise.map(batches, batch => {
-                return igbd.games({
-                    fields: '*',
-                    filters: {
-                        'external_games.uid-=': `(${batch.join(',')})`
-                    },
-                    limit: 50
+            return Promise.map(batches, batch => 
+                igbd
+                .fields([
+                    'name',
+                    'cover.url',
+                ])
+                .limit(50)
+                .filter([
+                    'external_games.category = 1',
+                    `external_games.uid = (${batch.join(',')})`,
+                    'game_modes.id = 2'
+                ])
+                .request('/games')
+                .catch(error => {
+                    throw error.response.data;
                 })
-            });
+            );
         })
         .then(detailsBatches => {
-            res.status(200).json(detailsBatches.map(batch => batch.body).flat());
+            res.status(200).json(detailsBatches.map(batch => batch.data).flat());
         })
         .catch(error => {
-            res.status(400).json(error.message);
-            console.error(error.message)
+            res.status(400).json(error);
         })
 });
 

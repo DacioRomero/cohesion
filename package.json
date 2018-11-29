@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/DacioRomero/Steam-Matcher#readme",
   "dependencies": {
+    "@igdb/apicalypse": "github:igdb/node-apicalypse",
     "array-intersection": "^0.1.2",
     "bluebird": "^3.5.3",
     "dotenv": "^6.1.0",
