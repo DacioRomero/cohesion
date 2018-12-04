@@ -14,11 +14,19 @@
 		<div class="container">
 			<H1>GameSame</H1>
 			<h2>Find games you and your friends both have</h2>
-			<form action="/app" method="get">
-				<input type="text" name="steamid" placeholder="What's your Steam ID?">
-				<input class="submit" type="submit" value="">
+			<form id="steamform"">
+				<input type="text" id="steamid" name="steamid" placeholder="What's your Steam ID?">
+				<input class="submit" id="" type="submit" value="" >
 				<i class="fas fa-arrow-right"></i>
 			</form>
+			<script type="text/javascript">
+				document.getElementById("steamform").addEventListener('submit', function(e) {
+					event.preventDefault();
+					var steamId = document.getElementById("steamid").value;
+					window.location = "/app/" + steamId;
+					return false;
+				});
+			</script>
 		</div>
 	</div>
 </body>

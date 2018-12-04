@@ -56,14 +56,7 @@ form{
 	position: relative;
 }
 
-input:focus {
-	outline: none;
-	color: white;
-}
-input:focus::-webkit-input-placeholder
-{
-color: white;
-}
+
 
 .submit {
 	width: 50px;
