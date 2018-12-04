@@ -1,11 +1,11 @@
 {
-  "name": "zoo-api",
+  "name": "steam-matcher",
   "version": "1.0.0",
   "description": "Partner project for [@MakeSchool](https://github.com/MakeSchool)'s SPD 1.2 Class",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js",
+    "start": "node server.js",
     "start:dev": "nodemon"
   },
   "repository": {
@@ -19,12 +19,16 @@
   },
   "homepage": "https://github.com/DacioRomero/Steam-Matcher#readme",
   "dependencies": {
+    "@igdb/apicalypse": "github:igdb/node-apicalypse",
+    "array-intersection": "^0.1.2",
+    "bluebird": "^3.5.3",
     "dotenv": "^6.1.0",
     "express": "^4.16.4",
     "express-handlebars": "^3.0.0",
-    "handlebars-helpers": "^0.10.0"
+    "igdb-api-node": "github:EmanuelNikolov/igdb-api-node",
+    "request": "^2.88.0"
   },
   "devDependencies": {
-    "nodemon": "^1.18.6"
+    "nodemon": "^1.18.7"
   }
 }
