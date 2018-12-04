@@ -16,24 +16,36 @@ const igbd = apicalypse({
     responseType: 'json'
 });
 
-router.get('/', (req, res) => {
-    if (!req.query.steamids) {
-        return res.status(400).json({
-            error: 'You need to provide SteamIDs'
+router.get('/test', (req, res) => {
+    steam.getAppDetails('440')
+        .then(games => {
+            res.status(200).json(games);
         })
+        .catch(error => {
+            console.error(error);
+            res.status(400).json({
+                error: error.message
+            });
+        })
+});
+
+router.get('/:host', (req, res) => {
+    const steamIds = [req.params.host]
+
+    if (req.query.friends !== undefined) {
+        steamIds.push(...req.query.friends.split(','));
     }
 
-    const steamids = req.query.steamids.split(',')
-    Promise.map(steamids, steamid => steam.getOwnedGames(steamid))
+    Promise.map(steamIds, steamid => steam.getOwnedGames(steamid))
         .then(playerGames => {
-            const sharedGames = intersection(...playerGames)
+            const sharedGames = intersection(...playerGames);
 
             let batches = []
             for (let i = 0; i < sharedGames.length; i += 50) {
                 batches.push(sharedGames.slice(i, i + 50));
             }
 
-            return Promise.map(batches, batch => 
+            return Promise.map(batches, batch =>
                 igbd
                 .fields([
                     'name',
@@ -47,15 +59,15 @@ router.get('/', (req, res) => {
                 ])
                 .request('/games')
                 .catch(error => {
-                    throw error.response.data;
+                    return res.status(400).json(error.response.data);
                 })
             );
         })
         .then(detailsBatches => {
-            res.status(200).json(detailsBatches.map(batch => batch.data).flat());
+            return res.status(200).json(detailsBatches.map(batch => batch.data).flat());
         })
         .catch(error => {
-            res.status(400).json(error);
+            return res.status(400).json(error);
         })
 });
 

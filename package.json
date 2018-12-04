@@ -2,10 +2,10 @@
   "name": "steam-matcher",
   "version": "1.0.0",
   "description": "Partner project for [@MakeSchool](https://github.com/MakeSchool)'s SPD 1.2 Class",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js",
+    "start": "node server.js",
     "start:dev": "nodemon"
   },
   "repository": {
