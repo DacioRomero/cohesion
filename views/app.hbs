@@ -1,0 +1,33 @@
+
+<div class="wrapper">
+	<div class="container-a">
+		<img class="profile" src="/images/user.jpg">
+		<h2>{{host}}</h2>
+		<!-- <i class="fas fa-plus-circle"></i> -->
+		<form method="GET">
+			{{#each friends}}
+			<input type="hidden" name="friends[]" value="{{this}}">
+			{{/each}}
+			<input class="friends" type="text" name="friends[]" placeholder="add friends">
+			<input class="submit" type="submit" name="" value="">
+			<i class="fas fa-arrow-right"></i>
+			<h3>Friends</h3>
+		</form>
+		<ul>
+			{{#each friends}}
+			<li class="">{{this}}</li>
+			{{/each}}
+		</ul>
+	</div>
+	<div class="container-b">
+		<div class="game-wrapper">
+			{{#each games}}
+				<div class="game">
+					<div class="card">
+						<img class="cover" src="https://images.igdb.com/igdb/image/upload/t_720p/{{this.cover.image_id}}.jpg">
+					</div>
+				</div>
+			{{/each}}
+		</div>
+	</div>
+</div>

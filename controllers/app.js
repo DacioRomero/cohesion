@@ -7,7 +7,7 @@ const SteamAPI = require('../utils/steamapi');
 
 const router = express.Router();
 const steam = SteamAPI();
-const igbd = apicalypse({
+const igdb = apicalypse({
     baseURL: "https://endpoint-alpha.igdb.com",
     headers: {
         'Accept': 'application/json',
@@ -17,45 +17,54 @@ const igbd = apicalypse({
 });
 
 router.get('/:host', (req, res) => {
-    const steamIds = [req.params.host]
+    const host = req.params.host;
+    const friends = req.query.friends;
 
-    if (req.query.friends != null) {
-        steamIds.push(...req.query.friends.split(','));
+    const steamIds = [host];
+
+    if (friends != null) {
+        steamIds.push(...friends);
     }
 
     Promise.map(steamIds, steamid => steam.getOwnedGames(steamid))
-        .then(playerGames => {
-            const sharedGames = intersection(...playerGames);
+        .then(userGames => {
+            const sharedGames = intersection(...userGames);
 
             let batches = []
             for (let i = 0; i < sharedGames.length; i += 50) {
                 batches.push(sharedGames.slice(i, i + 50));
             }
 
-            return Promise.map(batches, batch =>
-                igbd
-                .fields([
-                    'name',
-                    'cover.url',
-                ])
-                .limit(50)
-                .filter([
-                    'external_games.category = 1',
-                    `external_games.uid = (${batch.join(',')})`,
-                    'game_modes.id = 2'
-                ])
-                .request('/games')
-                .catch(error => {
-                    return res.status(400).json(error.response.data);
-                })
-            );
+            return Promise.map(batches, batch => {
+                const urls = batch.map(id => `https://store.steampowered.com/app/${id}`);
+
+                const query = igdb
+                    .fields([
+                        'name',
+                        'cover.image_id',
+                    ])
+                    .limit(50)
+                    .filter([
+                        'game_modes.slug = "multiplayer"',
+                        `websites.url = ("${urls.join('","')}")`,
+                        'game_modes.id = 2'
+                    ]);
+
+                return query.request('/games');
+            });
         })
         .then(detailsBatches => {
-            return res.status(200).json(detailsBatches.map(batch => batch.data).flat());
+            const games = detailsBatches.map(batch => batch.data).flat()
+
+            return res.render('app', {
+                host,
+                friends,
+                games
+            });
         })
         .catch(error => {
             return res.status(400).json(error);
         })
-});
+})
 
 module.exports = router;
