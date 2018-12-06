@@ -35,6 +35,7 @@ h1 {
 	font-weight: 700;
 	color: white;
 	margin-bottom: 10px;
+	text-shadow: 0 0 20px #000000
 }
 h2 {
 	font-size: 40px;
@@ -63,7 +64,8 @@ form{
     position: absolute;
     top: 2px;
     right: 1px;
-    background-color: white;
+    background-color: transparent;
+    z-index: 2;
 }
 
 i {
@@ -72,5 +74,4 @@ i {
 	font-size: 20px;
 	top: 17px;
     right: 15px;
-    pointer-events: none;
 }
