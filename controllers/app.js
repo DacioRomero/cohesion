@@ -16,23 +16,10 @@ const igbd = apicalypse({
     responseType: 'json'
 });
 
-router.get('/test', (req, res) => {
-    steam.getAppDetails('440')
-        .then(games => {
-            res.status(200).json(games);
-        })
-        .catch(error => {
-            console.error(error);
-            res.status(400).json({
-                error: error.message
-            });
-        })
-});
-
 router.get('/:host', (req, res) => {
     const steamIds = [req.params.host]
 
-    if (req.query.friends !== undefined) {
+    if (req.query.friends != null) {
         steamIds.push(...req.query.friends.split(','));
     }
 
