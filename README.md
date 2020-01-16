@@ -12,12 +12,7 @@ A webapp for finding game you can play with your friends
     - [IGDB API key](https://api.igdb.com/)
 1. Copy `services/server/.env.example` to `services/server/.env` and fill in your keys
 
-## Development
-
-1. Run `yarn compose:dev up`
-1. Visit [localhost:3000](http://localhost:3000)
-
-## Development
+## Local
 
 1. Run `yarn compose:local up`
 1. Visit [localhost:8080](http://localhost:8080)

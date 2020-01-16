@@ -4,7 +4,7 @@ const asyncHandler = require('express-async-handler');
 const keyBy = require('lodash/keyBy');
 const zipObject = require('lodash/zipObject');
 
-const IGDB = require('../utils/igdb');
+const igdb = require('../utils/igdb');
 const cache = require('../utils/redis');
 
 const router = express.Router();
@@ -19,28 +19,28 @@ router.get('/', asyncHandler(async (req, res) => {
     glossaries = zipObject(
       ['themes', 'genres', 'player_perspectives', 'platforms', 'game_modes'],
       await Promise.all([
-        IGDB()
+        igdb
           .fields('name')
           .request('/themes')
           .then(extrResData)
           .then(keyArrById),
-        IGDB()
+        igdb
           .fields('name')
           .request('/genres')
           .then(extrResData)
           .then(keyArrById),
-        IGDB()
+        igdb
           .fields('name')
           .request('/player_perspectives')
           .then(extrResData)
           .then(keyArrById),
-        IGDB()
+        igdb
           .fields('name')
           .where('id=(3,6,14)')
           .request('/platforms')
           .then(extrResData)
           .then(keyArrById),
-        IGDB()
+        igdb
           .fields('name')
           .request('/game_modes')
           .then(extrResData)

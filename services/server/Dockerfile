@@ -1,4 +1,4 @@
-ARG node_version=11.13.0
+ARG node_version=12.14.1
 
 FROM node:${node_version}
 

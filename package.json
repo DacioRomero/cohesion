@@ -9,17 +9,15 @@
     "services/*"
   ],
   "devDependencies": {
-    "cross-env": "^5.2.0",
-    "lerna": "^3.16.4",
+    "cross-env": "^6.0.3",
+    "lerna": "^3.20.2",
     "npm-run-all": "^4.1.5"
   },
   "scripts": {
     "start": "yarn run-p start:server start:client",
-    "start:client": "cross-env PROXY_URL=http://localhost:4000 yarn --cwd services/client start",
+    "start:client": "cross-env BROWSER=none PROXY_URL=http://localhost:4000 yarn --cwd services/client start",
     "start:server": "cross-env PORT=4000 yarn --cwd services/server nodemon",
-    "compose:dev": "yarn compose:cache -f docker-compose.dev.yml",
-    "compose:local": "yarn compose:cache -f docker-compose.local.yml",
-    "compose:prod": "yarn compose:cache -f docker-compose.prod.yml",
-    "compose:cache": "docker-compose -f docker-compose.cache.yml"
+    "compose:local": "docker-compose -f docker-compose.yml -f docker-compose.local.yml",
+    "compose:prod": "docker-compose -f docker-compose.yml -f docker-compose.prod.yml"
   }
 }

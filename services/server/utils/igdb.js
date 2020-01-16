@@ -1,6 +1,6 @@
 const apicalypse = require('apicalypse').default;
 
-module.exports = () => apicalypse({
+module.exports = apicalypse({
   baseURL: 'https://api-v3.igdb.com',
   headers: {
     Accept: 'application/json',

@@ -1,19 +1,17 @@
 const express = require('express');
 const asyncHandler = require('express-async-handler');
 
-const zipObject = require('lodash/zipObject');
-const chunk = require('lodash/chunk');
-const isEmpty = require('lodash/isEmpty');
-const mapValues = require('lodash/mapValues');
+const {
+  zipObject,
+  isEmpty,
+  mapValues
+} = require('lodash')
 
-// const Game = require('../models/game');
 const cache = require('../utils/redis');
-const IGDB = require('../utils/igdb');
+const igdb = require('../utils/igdb');
 const { nullToFalse, falseToNull } = require('../utils/conversions');
 
 const router = express.Router();
-
-const batchSize = 10;
 
 const getGames = async (ids) => {
   const cachedGames = zipObject(
@@ -29,38 +27,31 @@ const getGames = async (ids) => {
   const defaults = missingGames
     .map(id => ({ [id]: null }));
 
-  const igdbGames = (await Promise.all(
-    chunk(missingGames, batchSize)
-      .map(async (batch) => {
-        const urls = batch.map(id => `https://store.steampowered.com/app/${id}`);
+  const igdbGames = await igdb
+    .fields([
+      'name',
+      'cover.image_id',
+      'external_games.category',
+      'external_games.uid',
+      'themes',
+      'genres',
+      'player_perspectives',
+      'platforms',
+      'game_modes',
+    ])
+    .limit(missingGames.length)
+    .where([
+      'external_games.category = 1',
+      `external_games.uid=("${missingGames.join('","')}")`,
+      'parent_game=null', // Ignore DLC
+    ])
+    .request('/games')
+    .then(res => res.data.map((game) => {
+      const { external_games, ...newGame } = game;
+      const appid = external_games.find(external_game => external_game.category === 1).uid
 
-        const res = await IGDB()
-          .fields([
-            'name',
-            'cover.image_id',
-            'websites.url',
-            'themes',
-            'genres',
-            'player_perspectives',
-            'platforms',
-            'game_modes',
-          ])
-          .limit(batchSize)
-          .where([
-            `websites.url=("${urls.join('","')}")`,
-            'parent_game=null', // Ignore DLC
-          ])
-          .request('/games');
-
-        return res.data.map((game) => {
-          const { websites, ...newGame } = game;
-          const { url } = websites.find(site => site.url.startsWith('https://store.steampowered.com/app/'));
-          const [appid] = url.split('/').slice(-1);
-
-          return { [appid]: { appid, ...newGame } };
-        });
-      }),
-  )).flat();
+      return { [appid]: { appid, ...newGame } };
+    }))
 
   const newGames = Object.assign(
     {},

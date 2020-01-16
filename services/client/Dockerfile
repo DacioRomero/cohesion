@@ -1,5 +1,5 @@
-ARG node_version=11.13.0
-ARG nginx_version=1.15.11
+ARG node_version=12.14.1
+ARG nginx_version=1.17.7
 
 # --- BUILD ---
 
