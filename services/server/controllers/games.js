@@ -1,31 +1,25 @@
-const express = require('express');
-const asyncHandler = require('express-async-handler');
+const express = require('express')
+const asyncHandler = require('express-async-handler')
 
-const {
-  zipObject,
-  isEmpty,
-  mapValues
-} = require('lodash')
+const { zipObject, isEmpty, mapValues } = require('lodash')
 
-const cache = require('../utils/redis');
-const igdb = require('../utils/igdb');
-const { nullToFalse, falseToNull } = require('../utils/conversions');
+const cache = require('../utils/redis')
+const igdb = require('../utils/igdb')
+const { nullToFalse, falseToNull } = require('../utils/conversions')
 
-const router = express.Router();
+const router = express.Router()
 
-const getGames = async (ids) => {
+const getGames = async ids => {
   const cachedGames = zipObject(
     ids,
-    (await cache.mgetAsync(...ids.map(id => `/games/${id}`)))
-      .map(JSON.parse),
-  );
+    (await cache.mgetAsync(...ids.map(id => `/games/${id}`))).map(JSON.parse)
+  )
 
   const missingGames = Object.entries(cachedGames)
     .filter(([, game]) => game === null)
-    .map(([id]) => id);
+    .map(([id]) => id)
 
-  const defaults = missingGames
-    .map(id => ({ [id]: null }));
+  const defaults = missingGames.map(id => ({ [id]: null }))
 
   const igdbGames = await igdb
     .fields([
@@ -37,48 +31,52 @@ const getGames = async (ids) => {
       'genres',
       'player_perspectives',
       'platforms',
-      'game_modes',
+      'game_modes'
     ])
     .limit(missingGames.length)
     .where([
       'external_games.category = 1',
       `external_games.uid=("${missingGames.join('","')}")`,
-      'parent_game=null', // Ignore DLC
+      'parent_game=null' // Ignore DLC
     ])
     .request('/games')
-    .then(res => res.data.map((game) => {
-      const { external_games, ...newGame } = game;
-      const appid = external_games.find(external_game => external_game.category === 1).uid
+    .then(res =>
+      res.data.map(game => {
+        const { external_games: externalGames, ...newGame } = game
+        const appid = externalGames.find(game => game.category === 1).uid
 
-      return { [appid]: { appid, ...newGame } };
-    }))
+        return { [appid]: { appid, ...newGame } }
+      })
+    )
 
-  const newGames = Object.assign(
-    {},
-    ...defaults,
-    ...igdbGames,
-  );
+  const newGames = Object.assign({}, ...defaults, ...igdbGames)
 
   if (!isEmpty(newGames)) {
     await cache.msetAsync(
       ...Object.entries(newGames)
-        .map(([id, game]) => [`/games/${id}`, JSON.stringify(nullToFalse(game))])
-        .flat(),
-    );
+        .map(([id, game]) => [
+          `/games/${id}`,
+          JSON.stringify(nullToFalse(game))
+        ])
+        .flat()
+    )
   }
 
-  return { ...mapValues(cachedGames, falseToNull), ...newGames };
-};
+  return { ...mapValues(cachedGames, falseToNull), ...newGames }
+}
 
-router.get('/', asyncHandler(async (req, res) => {
-  let { appIds: ids } = req.query;
+router.get(
+  '/',
+  asyncHandler(async (req, res) => {
+    let { appIds: ids } = req.query
 
-  if (typeof ids === 'string' || ids instanceof String) {
-    ids = ids.split(',');
-  }
-  const games = await getGames(ids);
+    if (typeof ids === 'string' || ids instanceof String) {
+      ids = ids.split(',')
+    }
+    const games = await getGames(ids)
 
-  res.json(games);
-}));
+    res.json(games)
+  })
+)
 
-module.exports = router;
+module.exports = router

@@ -1,10 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import '../index.css';
+import React from 'react'
+import PropTypes from 'prop-types'
+import '../index.css'
 
-import {
-  Media, MediaLeft, Content, MediaContent,
-} from 'bloomer';
+import { Media, MediaLeft, Content, MediaContent } from 'bloomer'
 
 const game = {
   border: '1px solid rgb(52, 53, 54)',
@@ -16,8 +14,8 @@ const game = {
   // paddingLeft: '20px',
   width: '85%',
   backgroundColor: 'rgb(36,36,36)',
-  color: 'white',
-};
+  color: 'white'
+}
 
 const img = {
   objectFit: 'cover',
@@ -28,48 +26,72 @@ const img = {
   height: '130px',
   backgroundPosition: 'bottom',
   borderTopLeftRadius: '3px',
-  borderBottomLeftRadius: '3px',
-};
+  borderBottomLeftRadius: '3px'
+}
 
-
-function Game(props) { /* eslint-disable camelcase */
-  const {
-    themes, glossary, cover, name, game_modes, genres,
-  } = props;
-  const theme = themes && themes.map(
-    themeid => glossary.themes[themeid] && glossary.themes[themeid].name,
-  );
-  const genre = genres && genres.map(
-    genreid => glossary.genres[genreid] && glossary.genres[genreid].name,
-  );
+const Game = props => {
+  /* eslint-disable camelcase */
+  const { themes, glossary, cover, name, game_modes, genres } = props
+  const theme =
+    themes &&
+    themes.map(
+      themeid => glossary.themes[themeid] && glossary.themes[themeid].name
+    )
+  const genre =
+    genres &&
+    genres.map(
+      genreid => glossary.genres[genreid] && glossary.genres[genreid].name
+    )
 
   return (
-    <Media style={game} className="Media">
-      <MediaLeft style={{ marginBottom: '-6px', backgroundPosition: 'top', height: 'inherit' }}>
+    <Media className='Media' style={game}>
+      <MediaLeft
+        style={{
+          marginBottom: '-6px',
+          backgroundPosition: 'top',
+          height: 'inherit'
+        }}
+      >
         <img
+          alt='game cover'
+          src={
+            cover.image_id
+              ? `https://images.igdb.com/igdb/image/upload/t_cover_small_2x/${cover.image_id}.png`
+              : `https://dummyimage.com/500x500/000000/ffffff&text=${name}`
+          }
           style={img}
-          alt="game cover"
-          src={cover.image_id ? `https://images.igdb.com/igdb/image/upload/t_cover_small_2x/${cover.image_id}.png` : `https://dummyimage.com/500x500/000000/ffffff&text=${name}`}
         />
       </MediaLeft>
       <MediaContent style={{ padding: '12px' }}>
         <Content>
-          <p className="p">
-            <strong className="gamename" style={{ fontSize: '20px' }}>{name}</strong>
+          <p className='p'>
+            <strong className='gamename' style={{ fontSize: '20px' }}>
+              {name}
+            </strong>
             <br />
             {/* {game_modes.length && glossary.gamse_modes[game_modes[0]].name} */}
-            <i>{ game_modes.map(mode => glossary.game_modes[mode].name).join(', ') }</i>
+            <i>
+              {game_modes
+                .map(mode => glossary.game_modes[mode].name)
+                .join(', ')}
+            </i>
             <br />
             <strong>Genres: </strong>
-            {genre.map(_genres => _genres).filter(_genre => _genre).join(', ')}
+            {genre
+              .map(_genres => _genres)
+              .filter(_genre => _genre)
+              .join(', ')}
             <br />
             <strong>Themes: </strong>
-            {theme.map(_themes => _themes).filter(_theme => _theme).join(', ')}
+            {theme
+              .map(_themes => _themes)
+              .filter(_theme => _theme)
+              .join(', ')}
           </p>
         </Content>
       </MediaContent>
     </Media>
-  );
+  )
 }
 
 Game.defaultProps = {
@@ -78,17 +100,16 @@ Game.defaultProps = {
   cover: {},
   name: {},
   game_modes: [],
-  genres: [],
-};
+  genres: []
+}
 
 Game.propTypes = {
-  themes: PropTypes.arrayOf(PropTypes.number),
-  glossary: PropTypes.objectOf(PropTypes.object),
-  // eslint-disable-next-line react/forbid-prop-types
   cover: PropTypes.object,
-  name: PropTypes.string,
   game_modes: PropTypes.arrayOf(PropTypes.number),
   genres: PropTypes.arrayOf(PropTypes.number),
-};
+  glossary: PropTypes.objectOf(PropTypes.object),
+  name: PropTypes.string,
+  themes: PropTypes.arrayOf(PropTypes.number)
+}
 
-export default Game;
+export default Game

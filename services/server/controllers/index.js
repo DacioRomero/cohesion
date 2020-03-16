@@ -1,15 +1,15 @@
 // controller/app.js
-const express = require('express');
+const express = require('express')
 
-const router = express.Router();
+const router = express.Router()
 
 // Gets player info and game libraries.
-router.use('/players', require('./players'));
+router.use('/players', require('./players'))
 
 // Gets game details
-router.use('/games', require('./games'));
+router.use('/games', require('./games'))
 
 // For mapping id results from /details to names
-router.use('/glossaries', require('./glossaries'));
+router.use('/glossaries', require('./glossaries'))
 
-module.exports = router;
+module.exports = router
