@@ -6,8 +6,13 @@
   "license": "MIT",
   "author": "Dacio Romero <dacioromero@gmail.com>",
   "workspaces": {
-    "packages": ["services/*"],
-    "nohoist": ["**/react-scripts", "**/react-scripts/**"]
+    "packages": [
+      "services/*"
+    ],
+    "nohoist": [
+      "**/react-scripts",
+      "**/react-scripts/**"
+    ]
   },
   "scripts": {
     "compose:local": "docker-compose -f docker-compose.yml -f docker-compose.local.yml",
@@ -18,8 +23,8 @@
   },
   "husky": {
     "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
   "commitlint": {
@@ -31,16 +36,13 @@
   "lint-staged": {
     "*.{js,jsx}": "eslint --fix"
   },
+  "prettier": "@dacio/prettier-config",
   "eslintConfig": {
-    "extends": [
-      "@dacio/eslint-config",
-      "@dacio/eslint-config-react"
-    ],
     "env": {
-      "node": true,
-      "es6": true,
       "browser": true,
-      "jest": true
+      "es6": true,
+      "jest": true,
+      "node": true
     },
     "parser": "babel-eslint",
     "settings": {
@@ -54,9 +56,12 @@
           ]
         }
       }
-    }
+    },
+    "extends": [
+      "@dacio/eslint-config",
+      "@dacio/eslint-config-react"
+    ]
   },
-  "prettier": "@dacio/prettier-config",
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-conventional": "^8.3.4",
