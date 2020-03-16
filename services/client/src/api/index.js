@@ -1,7 +1,7 @@
 import chunk from 'lodash/chunk'
 
 export async function getPlayers(...steamIds) {
-  const res = await fetch(`/api/players?steamIds=${steamIds.join(',')}}`)
+  const res = await fetch(`/api/players?steamIds=${steamIds.join(',')}`)
 
   return res.json()
 }
