@@ -1,12 +1,12 @@
-const proxy = require('http-proxy-middleware');
+const { createProxyMiddleware } = require('http-proxy-middleware')
 
-console.log(process.env.PROXY_URL);
-
-module.exports = function(app) {
-  app.use(proxy('/api', {
-    target: process.env.PROXY_URL,
-    changeOrigin: true,
-    ws: true,
-    pathRewrite: { '^/api': '' },
-  }));
-};
+module.exports = app => {
+  app.use(
+    '/api',
+    createProxyMiddleware({
+      target: process.env.PROXY_URL,
+      changeOrigin: true,
+      pathRewrite: { '^/api': '' }
+    })
+  )
+}

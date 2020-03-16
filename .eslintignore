@@ -1,4 +1,3 @@
 **/node_modules/
 services/client/build/
-services/client/src/setupProxy.js
 services/client/src/serviceWorker.js
