@@ -64,7 +64,7 @@
     "@dacio/eslint-config-react": "^0.2.9",
     "@dacio/prettier-config": "^0.2.5",
     "babel-eslint": "^10.1.0",
-    "cross-env": "^6.0.3",
+    "cross-env": "^7.0.2",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-import": "^2.20.1",
