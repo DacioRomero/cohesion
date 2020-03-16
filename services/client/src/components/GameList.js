@@ -3,10 +3,7 @@ import PropTypes from 'prop-types'
 
 import styled from 'styled-components'
 
-import difference from 'lodash/difference'
-import omit from 'lodash/omit'
-import pick from 'lodash/pick'
-import pickBy from 'lodash/pickBy'
+import { difference, omit, pick, pickBy } from 'lodash'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'

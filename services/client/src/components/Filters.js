@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import Collapsible from 'react-collapsible'
 import '../App.css'
 
-import { Field, Checkbox } from 'bloomer'
+import { Field, Checkbox } from 'bloomer/esm'
 
-import startCase from 'lodash/startCase'
+import { startCase } from 'lodash'
 
 // const size = {
 //   fontSize: '13px',

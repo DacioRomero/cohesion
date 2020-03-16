@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import copyToClipboard from 'copy-to-clipboard'
 
-import { Navbar, NavbarEnd, Button } from 'bloomer'
+import { Navbar, NavbarEnd, Button } from 'bloomer/esm'
 import { Link } from 'react-router-dom'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'

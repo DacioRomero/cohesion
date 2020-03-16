@@ -11,6 +11,7 @@ COPY yarn.lock services/client/package.json ./
 RUN yarn install --pure-lockfile --no-cache
 COPY services/client/src ./src
 COPY services/client/public ./public
+COPY services/client/config-overrides.js ./
 
 RUN SKIP_PREFLIGHT_CHECK=true yarn build
 

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import '../index.css'
 
-import { Media, MediaLeft, Content, MediaContent } from 'bloomer'
+import { Media, MediaLeft, Content, MediaContent } from 'bloomer/esm'
 
 const game = {
   border: '1px solid rgb(52, 53, 54)',

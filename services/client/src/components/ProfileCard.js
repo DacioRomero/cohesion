@@ -12,7 +12,7 @@ import {
   Content,
   Subtitle,
   Delete
-} from 'bloomer'
+} from 'bloomer/esm'
 import TimeAgo from 'react-timeago'
 
 import '../App.css'

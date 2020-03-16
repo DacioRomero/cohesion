@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import { handleInputChange } from '@dacio/react-helpers'
 
-import { Hero, HeroBody, Container, Title } from 'bloomer'
+import { Hero, HeroBody, Container, Title } from 'bloomer/esm'
 
 import '../App.css'
 

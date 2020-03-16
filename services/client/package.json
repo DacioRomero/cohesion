@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "react-scripts build",
-    "eject": "react-scripts eject",
-    "start": "react-scripts start",
-    "test": "react-scripts test"
+    "build": "react-app-rewired build",
+    "eject": "react-app-rewired eject",
+    "start": "react-app-rewired start",
+    "test": "react-app-rewired test"
   },
   "browserslist": [
     ">0.2%",
@@ -24,6 +24,7 @@
     "copy-to-clipboard": "^3.0.8",
     "lodash": "^4.17.15",
     "normalize.css": "^8.0.1",
+    "preact": "^10.3.4",
     "prop-types": "^15.7.2",
     "react": "^16.13.0",
     "react-collapsible": "^2.7.0",
@@ -31,9 +32,12 @@
     "react-router-dom": "^5.0.0",
     "react-scripts": "^3.4.0",
     "react-timeago": "^4.4.0",
-    "styled-components": "^5.0.0"
-  },
-  "devDependencies": {
-    "http-proxy-middleware": "^1.0.2"
+    "styled-components": "^5.0.0",
+    "babel-plugin-import": "^1.13.0",
+    "babel-plugin-lodash": "^3.3.4",
+    "customize-cra": "^0.9.1",
+    "http-proxy-middleware": "^1.0.2",
+    "lodash-webpack-plugin": "^0.11.5",
+    "react-app-rewired": "^2.1.5"
   }
 }

@@ -3,10 +3,7 @@ import PropTypes from 'prop-types'
 
 import styled from 'styled-components'
 
-import intersection from 'lodash/intersection'
-import omit from 'lodash/omit'
-import pickBy from 'lodash/pickBy'
-import isEmpty from 'lodash/isEmpty'
+import { intersection, omit, pickBy, isEmpty } from 'lodash'
 
 import ProfileList from './ProfileContainer'
 import GameList from './GameList'
