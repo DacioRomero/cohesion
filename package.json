@@ -1,23 +1,38 @@
 {
   "name": "@cohesion/root",
   "version": "1.0.0",
-  "repository": "https://github.com/dacioromero/cohesion.git",
-  "author": "Dacio Romero <dacioromero@gmail.com>",
-  "license": "MIT",
   "private": true,
+  "repository": "https://github.com/dacioromero/cohesion.git",
+  "license": "MIT",
+  "author": "Dacio Romero <dacioromero@gmail.com>",
   "workspaces": [
     "services/*"
   ],
-  "devDependencies": {
-    "cross-env": "^6.0.3",
-    "lerna": "^3.20.2",
-    "npm-run-all": "^4.1.5"
-  },
   "scripts": {
+    "compose:local": "docker-compose -f docker-compose.yml -f docker-compose.local.yml",
+    "compose:prod": "docker-compose -f docker-compose.yml -f docker-compose.prod.yml",
     "start": "yarn run-p start:server start:client",
     "start:client": "cross-env BROWSER=none PROXY_URL=http://localhost:4000 yarn --cwd services/client start",
-    "start:server": "cross-env PORT=4000 yarn --cwd services/server nodemon",
-    "compose:local": "docker-compose -f docker-compose.yml -f docker-compose.local.yml",
-    "compose:prod": "docker-compose -f docker-compose.yml -f docker-compose.prod.yml"
+    "start:server": "cross-env PORT=4000 yarn --cwd services/server nodemon"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional",
+      "@commitlint/config-lerna-scopes"
+    ]
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^8.3.4",
+    "@commitlint/config-lerna-scopes": "^8.3.4",
+    "cross-env": "^6.0.3",
+    "husky": "^4.2.3",
+    "lerna": "^3.20.2",
+    "npm-run-all": "^4.1.5"
   }
 }
