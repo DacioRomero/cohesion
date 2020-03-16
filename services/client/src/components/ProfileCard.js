@@ -13,7 +13,7 @@ import {
   Subtitle,
   Delete
 } from 'bloomer'
-import Moment from 'react-moment'
+import TimeAgo from 'react-timeago'
 
 import '../App.css'
 
@@ -69,9 +69,7 @@ const ProfileCard = props => {
           {games}
           <br />
           <strong>Last Online: </strong>
-          <Moment fromNow unix>
-            {lastonline}
-          </Moment>
+          <TimeAgo date={lastonline * 1000} />
         </Content>
         <Delete style={absolute} onClick={onClickDelete} />
       </CardContent>
