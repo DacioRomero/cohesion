@@ -1,16 +1,11 @@
-const express = require('express')
-const asyncHandler = require('express-async-handler')
-
-const zipObject = require('lodash/zipObject')
-const isEmpty = require('lodash/isEmpty')
-const mapValues = require('lodash/mapValues')
-const merge = require('lodash/merge')
+const Router = require('@koa/router')
+const { zipObject, isEmpty, mapValues, merge } = require('lodash')
 
 const Steam = require('../utils/steam')
 const cache = require('../utils/redis')
 const { falseToNull, nullToFalse } = require('../utils/conversions')
 
-const router = express.Router()
+const router = new Router()
 
 const getIds = async inputs => {
   const cachedIns = zipObject(
@@ -107,30 +102,27 @@ const getProfiles = async ids => {
   return { ...mapValues(cachedProfs, falseToNull), ...newProfs }
 }
 
-router.get(
-  '/',
-  asyncHandler(async (req, res) => {
-    let { steamIds: ids } = req.query
+router.get('/', async ctx => {
+  let { steamIds: ids } = ctx.query
 
-    if (typeof ids === 'string' || ids instanceof String) {
-      ids = ids.split(',')
-    }
+  if (typeof ids === 'string' || ids instanceof String) {
+    ids = ids.split(',')
+  }
 
-    // Convert URLs, IDs, and vanity names
-    ids = (await getIds(ids)).filter(Boolean)
+  // Convert URLs, IDs, and vanity names
+  ids = (await getIds(ids)).filter(Boolean)
 
-    const [libraries, profiles] = await Promise.all([
-      getLibraries(ids),
-      getProfiles(ids)
-    ])
+  const [libraries, profiles] = await Promise.all([
+    getLibraries(ids),
+    getProfiles(ids)
+  ])
 
-    merge(
-      profiles,
-      mapValues(libraries, games => ({ games }))
-    )
+  merge(
+    profiles,
+    mapValues(libraries, games => ({ games }))
+  )
 
-    res.json(profiles)
-  })
-)
+  ctx.body = profiles
+})
 
 module.exports = router

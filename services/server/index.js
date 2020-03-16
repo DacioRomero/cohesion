@@ -1,23 +1,20 @@
-const express = require('express')
 const path = require('path')
+const Koa = require('koa')
+const json = require('koa-json')
+
+const controllers = require('./controllers')
 
 require('dotenv').config({
   path: path.join(__dirname, '.env')
 })
 
-const app = express()
+const app = new Koa()
 
-app.use(express.json())
-app.use(
-  express.urlencoded({
-    extended: true
-  })
-)
-
-app.use(require('./controllers'))
+app.use(json())
+app.use(controllers.routes(), controllers.allowedMethods())
 
 if (require.main === module) {
-  const port = process.env.PORT || 3000
+  const port = Number(process.env.PORT || 3000)
 
   app.listen(port, () => {
     console.log(`App listening on port ${port}!`)

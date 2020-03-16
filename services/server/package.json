@@ -2,19 +2,21 @@
   "name": "@cohesion/server",
   "version": "0.0.0",
   "private": true,
+  "license": "MIT",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "license": "MIT",
   "dependencies": {
     "@dacio/steam-wrapper": "^4.1.0",
+    "@koa/router": "^8.0.8",
     "apicalypse": "0.1.6",
     "bluebird": "^3.5.3",
     "dotenv": "^8.0.0",
-    "express": "^4.16.4",
-    "express-async-handler": "^1.1.4",
+    "koa": "^2.11.0",
+    "koa-json": "^2.0.2",
+    "koa-router": "^8.0.8",
     "lodash": "^4.17.15",
     "redis": "^3.0.2"
   },

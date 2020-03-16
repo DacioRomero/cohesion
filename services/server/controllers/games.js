@@ -1,13 +1,11 @@
-const express = require('express')
-const asyncHandler = require('express-async-handler')
-
+const Router = require('@koa/router')
 const { zipObject, isEmpty, mapValues } = require('lodash')
 
 const cache = require('../utils/redis')
 const igdb = require('../utils/igdb')
 const { nullToFalse, falseToNull } = require('../utils/conversions')
 
-const router = express.Router()
+const router = new Router()
 
 const getGames = async ids => {
   const cachedGames = zipObject(
@@ -65,18 +63,15 @@ const getGames = async ids => {
   return { ...mapValues(cachedGames, falseToNull), ...newGames }
 }
 
-router.get(
-  '/',
-  asyncHandler(async (req, res) => {
-    let { appIds: ids } = req.query
+router.get('/', async ctx => {
+  let { appIds: ids } = ctx.query
 
-    if (typeof ids === 'string' || ids instanceof String) {
-      ids = ids.split(',')
-    }
-    const games = await getGames(ids)
+  if (typeof ids === 'string' || ids instanceof String) {
+    ids = ids.split(',')
+  }
+  const games = await getGames(ids)
 
-    res.json(games)
-  })
-)
+  ctx.body = games
+})
 
 module.exports = router
