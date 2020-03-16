@@ -1,35 +1,25 @@
-import axios from 'axios'
-import qs from 'qs'
-
 import chunk from 'lodash/chunk'
 
-const paramsSerializer = params =>
-  qs.stringify(params, { arrayFormat: 'comma' })
-
 export async function getPlayers(...steamIds) {
-  const res = await axios.get('/api/players', {
-    params: { steamIds },
-    paramsSerializer
-  })
+  const res = await fetch(`/api/players?steamIds=${steamIds.join(',')}}`)
 
-  return res.data
+  return res.json()
 }
 
 export async function getGames(...appIds) {
-  const res = await Promise.all(
-    chunk(appIds, 100).map(ids =>
-      axios.get('/api/games', {
-        params: { appIds: ids },
-        paramsSerializer
-      })
-    )
+  const gameBatch = await Promise.all(
+    chunk(appIds, 100).map(async ids => {
+      const res = await fetch(`/api/games?appIds=${ids.join(',')}`)
+
+      return res.json()
+    })
   )
 
-  return Object.assign({}, ...res.map(r => r.data))
+  return Object.assign({}, ...gameBatch)
 }
 
 export async function getGlossaries() {
-  const res = await axios.get('/api/glossaries')
+  const res = await fetch('/api/glossaries')
 
-  return res.data
+  return res.json()
 }

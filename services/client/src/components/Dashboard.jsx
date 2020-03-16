@@ -7,7 +7,6 @@ import intersection from 'lodash/intersection'
 import omit from 'lodash/omit'
 import pickBy from 'lodash/pickBy'
 import isEmpty from 'lodash/isEmpty'
-import qs from 'qs'
 
 import ProfileList from './ProfileContainer'
 import GameList from './GameList'
@@ -71,14 +70,22 @@ class Dashboard extends Component {
       {}
     )
 
-    let players
-    if (search) {
-      let queryFilters
-      ;({ players, ...queryFilters } = qs.parse(search, {
-        ignoreQueryPrefix: true
-      }))
+    const players = []
+    const searchParams = new URLSearchParams(search)
 
-      Object.assign(filterLists, queryFilters)
+    for (const [key, value] of searchParams) {
+      if (key === 'players[]') {
+        players.push(value)
+      } else if (key.endsWith('[]')) {
+        const filterKey = key.substring(0, key.length - 2)
+        let filterList = filterLists[filterKey]
+
+        if (!filterList) {
+          filterList = filterLists[filterKey] = []
+        }
+
+        filterList.push(value)
+      }
     }
 
     // Generate filters from lists in query
@@ -98,7 +105,7 @@ class Dashboard extends Component {
 
     // eslint-disable-next-line react/no-did-mount-set-state
     this.setState({ glossaries, filters }, () => {
-      if (players) {
+      if (players.length !== 0) {
         this.addPlayers(...players)
       }
     })
@@ -133,14 +140,20 @@ class Dashboard extends Component {
     players = Object.keys(players)
     const filters = pickBy(this.genFilterLists(), list => !isEmpty(list))
 
+    const searchParams = new URLSearchParams()
+
+    for (const player of players) {
+      searchParams.append('players[]', player)
+    }
+
+    for (const [filterName, filterList] of Object.entries(filters)) {
+      for (const filterValue of filterList) {
+        searchParams.append(`${filterName}[]`, filterValue)
+      }
+    }
+
     history.push({
-      search: `?${qs.stringify(
-        {
-          players,
-          ...filters
-        },
-        { arrayFormat: 'brackets' }
-      )}`
+      search: searchParams.toString()
     })
   }
 
