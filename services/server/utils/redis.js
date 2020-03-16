@@ -1,6 +1,3 @@
-const redis = require('redis')
-const bluebird = require('bluebird')
+const Redis = require('ioredis')
 
-bluebird.promisifyAll(redis)
-
-module.exports = redis.createClient(process.env.REDIS_URL)
+module.exports = new Redis(process.env.REDIS_URL)

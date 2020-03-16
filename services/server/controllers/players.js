@@ -10,7 +10,7 @@ const router = new Router()
 const getIds = async inputs => {
   const cachedIns = zipObject(
     inputs,
-    (await cache.mgetAsync(...inputs.map(i => `/ids/${i}`))).map(JSON.parse)
+    (await cache.mget(...inputs.map(i => `/ids/${i}`))).map(JSON.parse)
   )
 
   const missingIns = Object.entries(cachedIns)
@@ -23,7 +23,7 @@ const getIds = async inputs => {
   )
 
   if (!isEmpty(newIns)) {
-    await cache.msetAsync(
+    await cache.mset(
       ...Object.entries(newIns)
         .map(([input, id]) => [
           `/ids/${input}`,
@@ -40,9 +40,7 @@ const getLibraries = async ids => {
   // Get cached values
   const cachedLibs = zipObject(
     ids,
-    (await cache.mgetAsync(...ids.map(id => `/libraries/${id}`))).map(
-      JSON.parse
-    )
+    (await cache.mget(...ids.map(id => `/libraries/${id}`))).map(JSON.parse)
   )
 
   // Get from wrapper new for all missing
@@ -60,7 +58,7 @@ const getLibraries = async ids => {
 
   // Store missing values
   if (!isEmpty(newLibs)) {
-    await cache.msetAsync(
+    await cache.mset(
       ...Object.entries(newLibs)
         .map(([id, games]) => [
           `/libraries/${id}`,
@@ -77,7 +75,7 @@ const getProfiles = async ids => {
   // Get cached values
   const cachedProfs = zipObject(
     ids,
-    (await cache.mgetAsync(...ids.map(id => `/profiles/${id}`))).map(JSON.parse)
+    (await cache.mget(...ids.map(id => `/profiles/${id}`))).map(JSON.parse)
   )
 
   // Get from wrapper new for all missing
@@ -89,7 +87,7 @@ const getProfiles = async ids => {
 
   // Store missing values
   if (!isEmpty(newProfs)) {
-    await cache.msetAsync(
+    await cache.mset(
       ...Object.entries(newProfs)
         .map(([id, profile]) => [
           `/profiles/${id}`,
@@ -108,6 +106,8 @@ router.get('/', async ctx => {
   if (typeof ids === 'string' || ids instanceof String) {
     ids = ids.split(',')
   }
+
+  console.log(ids)
 
   // Convert URLs, IDs, and vanity names
   ids = (await getIds(ids)).filter(Boolean)

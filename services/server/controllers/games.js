@@ -10,7 +10,7 @@ const router = new Router()
 const getGames = async ids => {
   const cachedGames = zipObject(
     ids,
-    (await cache.mgetAsync(...ids.map(id => `/games/${id}`))).map(JSON.parse)
+    (await cache.mget(...ids.map(id => `/games/${id}`))).map(JSON.parse)
   )
 
   const missingGames = Object.entries(cachedGames)
@@ -50,7 +50,7 @@ const getGames = async ids => {
   const newGames = Object.assign({}, ...defaults, ...igdbGames)
 
   if (!isEmpty(newGames)) {
-    await cache.msetAsync(
+    await cache.mset(
       ...Object.entries(newGames)
         .map(([id, game]) => [
           `/games/${id}`,

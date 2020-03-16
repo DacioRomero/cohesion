@@ -10,7 +10,7 @@ const extrResData = res => res.data
 const keyArrById = arr => keyBy(arr, 'id')
 
 router.get('/', async ctx => {
-  let glossaries = JSON.parse(await cache.getAsync('/glossaries'))
+  let glossaries = await cache.get('/glossaries').then(JSON.parse)
 
   if (!glossaries) {
     glossaries = zipObject(
@@ -44,7 +44,7 @@ router.get('/', async ctx => {
           .then(keyArrById)
       ])
     )
-    await cache.setAsync('/glossaries', JSON.stringify(glossaries))
+    await cache.set('/glossaries', JSON.stringify(glossaries))
   }
 
   ctx.body = glossaries

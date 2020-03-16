@@ -9,16 +9,15 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@dacio/steam-wrapper": "^4.1.0",
+    "@dacio/steam-wrapper": "^4.1.1",
     "@koa/router": "^8.0.8",
     "apicalypse": "0.1.6",
-    "bluebird": "^3.5.3",
     "dotenv": "^8.0.0",
+    "ioredis": "^4.16.0",
     "koa": "^2.11.0",
     "koa-json": "^2.0.2",
     "koa-router": "^8.0.8",
-    "lodash": "^4.17.15",
-    "redis": "^3.0.2"
+    "lodash": "^4.17.15"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"
