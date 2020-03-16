@@ -5,9 +5,10 @@
   "repository": "https://github.com/dacioromero/cohesion.git",
   "license": "MIT",
   "author": "Dacio Romero <dacioromero@gmail.com>",
-  "workspaces": [
-    "services/*"
-  ],
+  "workspaces": {
+    "packages": ["services/*"],
+    "nohoist": ["**/react-scripts", "**/react-scripts/**"]
+  },
   "scripts": {
     "compose:local": "docker-compose -f docker-compose.yml -f docker-compose.local.yml",
     "compose:prod": "docker-compose -f docker-compose.yml -f docker-compose.prod.yml",
