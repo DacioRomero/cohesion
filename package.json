@@ -17,7 +17,7 @@
   "scripts": {
     "compose:local": "docker-compose -f docker-compose.yml -f docker-compose.local.yml",
     "compose:prod": "docker-compose -f docker-compose.yml -f docker-compose.prod.yml",
-    "start": "yarn run-p start:server start:client",
+    "start": "run-p start:server start:client",
     "start:client": "cross-env BROWSER=none PROXY_URL=http://localhost:4000 yarn --cwd services/client start",
     "start:server": "cross-env PORT=4000 yarn --cwd services/server nodemon"
   },
@@ -34,7 +34,8 @@
     ]
   },
   "lint-staged": {
-    "*.{js,jsx}": "eslint --fix"
+    "*.{js,jsx}": "eslint --cache --fix",
+    "*.{md,json,yml}": "prettier --write"
   },
   "prettier": "@dacio/prettier-config",
   "eslintConfig": {
@@ -63,24 +64,24 @@
     ]
   },
   "devDependencies": {
-    "@commitlint/cli": "^8.3.5",
-    "@commitlint/config-conventional": "^8.3.4",
-    "@commitlint/config-lerna-scopes": "^8.3.4",
-    "@dacio/eslint-config": "^0.2.5",
-    "@dacio/eslint-config-react": "^0.2.9",
-    "@dacio/prettier-config": "^0.2.5",
+    "@commitlint/cli": "^9.1.2",
+    "@commitlint/config-conventional": "^9.1.2",
+    "@commitlint/config-lerna-scopes": "^9.1.2",
+    "@dacio/eslint-config": "^0.3.0",
+    "@dacio/eslint-config-react": "^0.3.0",
+    "@dacio/prettier-config": "^0.3.0",
     "babel-eslint": "^10.1.0",
     "cross-env": "^7.0.2",
-    "eslint": "^6.8.0",
+    "eslint": "^7.7.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.19.0",
-    "eslint-plugin-react-hooks": "^2.5.0",
+    "eslint-plugin-react-hooks": "^4.1.0",
     "husky": "^4.2.3",
     "lerna": "^3.20.2",
     "lint-staged": "^10.0.8",
     "npm-run-all": "^4.1.5",
-    "prettier": "^1.19.1"
+    "prettier": "^2.0.5"
   }
 }

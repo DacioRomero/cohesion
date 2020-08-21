@@ -5,11 +5,11 @@ A webapp for finding game you can play with your friends
 # Getting started
 
 1. Install
-    - [Docker](https://www.docker.com/get-started/)
-    - [Docker Compose](https://docs.docker.com/compose/install/)
+   - [Docker](https://www.docker.com/get-started/)
+   - [Docker Compose](https://docs.docker.com/compose/install/)
 1. Get
-    - [Steam API key](https://steamcommunity.com/dev/apikey)
-    - [IGDB API key](https://api.igdb.com/)
+   - [Steam API key](https://steamcommunity.com/dev/apikey)
+   - [IGDB API key](https://api.igdb.com/)
 1. Copy `services/server/.env.example` to `services/server/.env` and fill in your keys
 
 ## Local
